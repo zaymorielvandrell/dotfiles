@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+GIMP_CONFIG="$HOME/.config/GIMP"
+GIMP_CACHE="$HOME/.cache/gimp"
+SOURCE_ZIP="$HOME/.bin/share/PhotoGIMP-linux.zip"
+
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+EXTRACTED_GIMP="$TMP_DIR/PhotoGIMP-linux/.config/GIMP"
+
+if [[ ! -f "$SOURCE_ZIP" ]]; then
+  echo "Error: source archive not found: $SOURCE_ZIP" >&2
+  exit 1
+fi
+
+if [[ -d "$GIMP_CONFIG" ]]; then
+  read -rp "Existing GIMP config detected. Replace it? [Y/n]: " confirm
+
+  if [[ ! "${confirm:-Y}" =~ ^[Yy]$ ]]; then
+    echo "Operation cancelled"
+    exit 0
+  fi
+fi
+
+rm -rf "$GIMP_CONFIG" "$GIMP_CACHE"
+
+unzip -qo "$SOURCE_ZIP" -d "$TMP_DIR"
+
+if [[ ! -d "$EXTRACTED_GIMP" ]]; then
+  echo "Error: invalid archive structure (GIMP config not found)" >&2
+  exit 1
+fi
+
+mv "$EXTRACTED_GIMP" "$GIMP_CONFIG"
+
+echo "GIMP configuration installed successfully"

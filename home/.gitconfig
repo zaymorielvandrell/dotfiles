@@ -1,0 +1,15 @@
+[branch]
+  sort = -committerdate
+[init]
+  defaultBranch = main
+[pull]
+  rebase = true
+[push]
+  autoSetupRemote = true
+[rebase]
+  autoStash = true
+[tag]
+  sort = -version:refname
+[user]
+  name = Zaymoriel Vandrell
+  email = zaymorielvandrell@gmail.com
