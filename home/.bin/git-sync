@@ -7,32 +7,32 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   exit 1
 fi
 
-BRANCH=$(git branch --show-current)
+branch="$(git branch --show-current)"
 
 if [[ -z "$(git status --porcelain)" ]]; then
-  echo "Info: nothing to commit on '$BRANCH'"
+  echo "Info: nothing to commit on $branch"
   exit 0
 fi
 
 git add .
 
-TIMESTAMP=$(date +%Y%m%d-%H%M)
+timestamp="$(date +%Y%m%d-%H%M)"
 
 if [[ $# -gt 0 ]]; then
-  MESSAGE="$*"
+  message="$*"
 else
-  MESSAGE="chore(dev): sync $TIMESTAMP"
+  message="chore(dev): sync $timestamp"
 fi
 
-git commit -m "$MESSAGE"
+git commit -m "$message"
 
-read -rp "Push to '$BRANCH'? [Y/n]: " confirm
+read -rp "Push to $branch? [Y/n]: " reply
 
-if [[ ! "${confirm:-Y}" =~ ^[Yy]$ ]]; then
+if [[ ! "${reply:-Y}" =~ ^[Yy]$ ]]; then
   echo "Operation cancelled"
   exit 0
 fi
 
 git push
 
-echo "Pushed to '$BRANCH' with message: $MESSAGE"
+echo "Pushed to $branch with message: $message"

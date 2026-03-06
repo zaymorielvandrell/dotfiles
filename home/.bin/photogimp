@@ -6,10 +6,10 @@ GIMP_CONFIG="$HOME/.config/GIMP"
 GIMP_CACHE="$HOME/.cache/gimp"
 SOURCE_ZIP="$HOME/.bin/share/PhotoGIMP-linux.zip"
 
-TMP_DIR="$(mktemp -d)"
-trap 'rm -rf "$TMP_DIR"' EXIT
+tmp_dir="$(mktemp -d)"
+trap 'rm -rf "$tmp_dir"' EXIT
 
-EXTRACTED_GIMP="$TMP_DIR/PhotoGIMP-linux/.config/GIMP"
+extracted_gimp="$tmp_dir/PhotoGIMP-linux/.config/GIMP"
 
 if [[ ! -f "$SOURCE_ZIP" ]]; then
   echo "Error: source archive not found: $SOURCE_ZIP" >&2
@@ -17,9 +17,9 @@ if [[ ! -f "$SOURCE_ZIP" ]]; then
 fi
 
 if [[ -d "$GIMP_CONFIG" ]]; then
-  read -rp "Existing GIMP config detected. Replace it? [Y/n]: " confirm
+  read -rp "Existing GIMP config detected. Replace it? [Y/n]: " reply
 
-  if [[ ! "${confirm:-Y}" =~ ^[Yy]$ ]]; then
+  if [[ ! "${reply:-Y}" =~ ^[Yy]$ ]]; then
     echo "Operation cancelled"
     exit 0
   fi
@@ -27,13 +27,13 @@ fi
 
 rm -rf "$GIMP_CONFIG" "$GIMP_CACHE"
 
-unzip -qo "$SOURCE_ZIP" -d "$TMP_DIR"
+unzip -qo "$SOURCE_ZIP" -d "$tmp_dir"
 
-if [[ ! -d "$EXTRACTED_GIMP" ]]; then
+if [[ ! -d "$extracted_gimp" ]]; then
   echo "Error: invalid archive structure (GIMP config not found)" >&2
   exit 1
 fi
 
-mv "$EXTRACTED_GIMP" "$GIMP_CONFIG"
+mv "$extracted_gimp" "$GIMP_CONFIG"
 
 echo "GIMP configuration installed successfully"
