@@ -5,7 +5,7 @@
   },
   "SchemaStore.nvim": {
     "branch": "main",
-    "commit": "2c2f2d3fb568bbff1a5e1344e87a979b7edf50a8"
+    "commit": "e75f2362624698864957a694d80ca0c116bd24d3"
   },
   "blink.cmp": {
     "branch": "main",
@@ -17,7 +17,7 @@
   },
   "catppuccin": {
     "branch": "main",
-    "commit": "0a5de4da015a175f416d6ef1eda84661623e0500"
+    "commit": "c4d475e4b5684747cde9b3f849186af7837d4397"
   },
   "conform.nvim": {
     "branch": "master",
@@ -37,7 +37,7 @@
   },
   "grug-far.nvim": {
     "branch": "main",
-    "commit": "9370422e5cdd55321c0b8c4880082c5fd4e52e99"
+    "commit": "ac52ee2d87399dfd7b0d59d5b1d2bbaf2a4028f1"
   },
   "harpoon": {
     "branch": "harpoon2",
@@ -97,11 +97,11 @@
   },
   "nvim-treesitter": {
     "branch": "main",
-    "commit": "cb2cb74f3c3cbbcc17e79cada2060165d616d849"
+    "commit": "544320a9cf5d6bf539ec1cc54d393064015670c4"
   },
   "nvim-treesitter-textobjects": {
     "branch": "main",
-    "commit": "a0e182ae21fda68c59d1f36c9ed45600aef50311"
+    "commit": "0bc4ef0a34d80fd6e67b59bd71fcbb0ef9ef4756"
   },
   "nvim-ts-autotag": {
     "branch": "main",
@@ -117,7 +117,7 @@
   },
   "render-markdown.nvim": {
     "branch": "main",
-    "commit": "1c958131c083c8557ea499fdb08c88b8afb05c4e"
+    "commit": "bd482f9a4827c9422231a7db1439c5cff1e69ae0"
   },
   "snacks.nvim": {
     "branch": "main",
