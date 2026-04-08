@@ -33,7 +33,7 @@
   },
   "gitsigns.nvim": {
     "branch": "main",
-    "commit": "0d797daee85366bc242580e352a4f62d67557b84"
+    "commit": "8d82c240f190fc33723d48c308ccc1ed8baad69d"
   },
   "grug-far.nvim": {
     "branch": "main",
@@ -61,7 +61,7 @@
   },
   "mason-lspconfig.nvim": {
     "branch": "main",
-    "commit": "25f609e7fca78af7cede4f9fa3af8a94b1c4950b"
+    "commit": "63a3c6a80538de1003373a619e29aeda27809ad3"
   },
   "mason.nvim": {
     "branch": "main",
