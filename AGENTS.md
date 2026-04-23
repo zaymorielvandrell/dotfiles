@@ -10,6 +10,7 @@
 - `bin/status.sh`: compares `home/` against live `$HOME` for every tracked path and exits non-zero when any difference is found.
 - `bin/collect.sh`: copies tracked content from live `$HOME` into `home/`. Tracked directories use `rsync -a --delete`; tracked files use `cp -a`.
 - `bin/apply.sh`: copies tracked content from `home/` into live `$HOME`. It creates a timestamped backup under `.backup/` first, then syncs tracked directories with `rsync -a --delete`.
+- The `bin/` scripts are intentionally minimal and do not accept CLI arguments; they always process the full tracked set.
 - `rsync` is required for `bin/collect.sh` and `bin/apply.sh`; `diff` is required for `bin/status.sh`.
 
 ## Safety-Critical Behavior
@@ -21,6 +22,7 @@
 
 - Tracked directories: `.bin`, `.config/nvim`.
 - Tracked files: `.bash_profile`, `.bashrc`, `.config/ghostty/config`, `.config/starship.toml`, `.gitconfig`, `.tmux.conf`.
+- `home/.bin/` contains user-invoked executables without `.sh` extensions; keep them extensionless and self-contained rather than sourcing shared helpers from `bin/`.
 
 ## Neovim Structure
 
@@ -34,4 +36,6 @@
 
 - Root `.editorconfig` sets 2-space indentation, LF endings, and final newlines for the repo.
 - Neovim Lua uses `home/.config/nvim/stylua.toml` (`indent_width = 2`, `column_width = 100`). Run `stylua home/.config/nvim` after editing Lua if `stylua` is available.
-- There is no repo-wide test or CI config in this snapshot. For shell script edits, use focused checks like `bash -n bin/*.sh`; for sync behavior, use `bin/status.sh` before and after changes instead of guessing.
+- There is no repo-wide test or CI config in this snapshot. For shell script edits, use focused checks like `bash -n bin/*.sh` or `bash -n home/.bin/*`.
+- For shell linting, use `shellcheck -x -P bin bin/*.sh` for the `bin/` scripts; `home/.bin/*` can be linted directly with `shellcheck`.
+- For sync behavior, use `bin/status.sh` before and after changes instead of guessing.
