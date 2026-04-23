@@ -1,38 +1,54 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -euo pipefail
 
-if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  echo "Error: not inside a git repository" >&2
-  exit 1
-fi
+log_info() {
+  printf '%s\n' "$*"
+}
 
-branch="$(git branch --show-current)"
+log_error() {
+  printf 'ERROR: %s\n' "$*" >&2
+}
 
-if [[ -z "$(git status --porcelain)" ]]; then
-  echo "Info: nothing to commit on $branch"
-  exit 0
-fi
+main() {
+  local branch
+  local timestamp
+  local message
+  local reply
 
-git add .
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    log_error 'not inside a git repository'
+    exit 1
+  fi
 
-timestamp="$(date +%Y%m%d-%H%M)"
+  branch="$(git branch --show-current)"
 
-if [[ $# -gt 0 ]]; then
-  message="$*"
-else
-  message="chore(dev): sync $timestamp"
-fi
+  if [[ -z "$(git status --porcelain)" ]]; then
+    log_info "INFO: nothing to commit on ${branch}"
+    exit 0
+  fi
 
-git commit -m "$message"
+  git add .
 
-read -rp "Push to $branch? [Y/n]: " reply
+  timestamp="$(date +%Y%m%d-%H%M)"
 
-if [[ ! "${reply:-Y}" =~ ^[Yy]$ ]]; then
-  echo "Operation cancelled"
-  exit 0
-fi
+  if (($# > 0)); then
+    message="$*"
+  else
+    message="chore(dev): sync ${timestamp}"
+  fi
 
-git push
+  git commit -m "${message}"
 
-echo "Pushed to $branch with message: $message"
+  read -rp "Push to ${branch}? [Y/n]: " reply
+
+  if [[ ! "${reply:-Y}" =~ ^[Yy]$ ]]; then
+    log_info 'Operation cancelled'
+    exit 0
+  fi
+
+  git push
+  log_info "Pushed to ${branch} with message: ${message}"
+}
+
+main "$@"

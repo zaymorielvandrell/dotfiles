@@ -1,39 +1,59 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -euo pipefail
 
 GIMP_CONFIG="$HOME/.config/GIMP"
 GIMP_CACHE="$HOME/.cache/gimp"
 SOURCE_ZIP="$HOME/.bin/share/PhotoGIMP-linux.zip"
+TMP_DIR=''
 
-tmp_dir="$(mktemp -d)"
-trap 'rm -rf "$tmp_dir"' EXIT
+log_info() {
+  printf '%s\n' "$*"
+}
 
-extracted_gimp="$tmp_dir/PhotoGIMP-linux/.config/GIMP"
+log_error() {
+  printf 'ERROR: %s\n' "$*" >&2
+}
 
-if [[ ! -f "$SOURCE_ZIP" ]]; then
-  echo "Error: source archive not found: $SOURCE_ZIP" >&2
-  exit 1
-fi
-
-if [[ -d "$GIMP_CONFIG" ]]; then
-  read -rp "Existing GIMP config detected. Replace it? [Y/n]: " reply
-
-  if [[ ! "${reply:-Y}" =~ ^[Yy]$ ]]; then
-    echo "Operation cancelled"
-    exit 0
+cleanup() {
+  if [[ -n "${TMP_DIR}" ]]; then
+    rm -rf -- "${TMP_DIR}"
   fi
-fi
+}
 
-rm -rf "$GIMP_CONFIG" "$GIMP_CACHE"
+main() {
+  local extracted_gimp
+  local reply
 
-unzip -qo "$SOURCE_ZIP" -d "$tmp_dir"
+  if [[ ! -f "${SOURCE_ZIP}" ]]; then
+    log_error "source archive not found: ${SOURCE_ZIP}"
+    exit 1
+  fi
 
-if [[ ! -d "$extracted_gimp" ]]; then
-  echo "Error: invalid archive structure (GIMP config not found)" >&2
-  exit 1
-fi
+  if [[ -d "${GIMP_CONFIG}" ]]; then
+    read -rp 'Existing GIMP config detected. Replace it? [Y/n]: ' reply
 
-mv "$extracted_gimp" "$GIMP_CONFIG"
+    if [[ ! "${reply:-Y}" =~ ^[Yy]$ ]]; then
+      log_info 'Operation cancelled'
+      exit 0
+    fi
+  fi
 
-echo "GIMP configuration installed successfully"
+  TMP_DIR="$(mktemp -d)"
+  trap cleanup EXIT
+
+  extracted_gimp="${TMP_DIR}/PhotoGIMP-linux/.config/GIMP"
+
+  unzip -qo "${SOURCE_ZIP}" -d "${TMP_DIR}"
+
+  if [[ ! -d "${extracted_gimp}" ]]; then
+    log_error 'invalid archive structure (GIMP config not found)'
+    exit 1
+  fi
+
+  rm -rf "${GIMP_CONFIG}" "${GIMP_CACHE}"
+  mv "${extracted_gimp}" "${GIMP_CONFIG}"
+  log_info 'GIMP configuration installed successfully'
+}
+
+main "$@"
