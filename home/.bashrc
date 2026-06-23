@@ -9,12 +9,9 @@ if [[ -d "$HOME/.bin" ]]; then
   export PATH="$HOME/.bin:$PATH"
 fi
 
-if [[ -d "$HOME/.opencode/bin" ]]; then
-  export PATH="$HOME/.opencode/bin:$PATH"
-fi
-
-if [[ -d "$HOME/.config/composer/vendor/bin" ]]; then
-  export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+if [[ -d "$HOME/.config/herd-lite/bin" ]]; then
+  export PATH="$HOME/.config/herd-lite/bin:$PATH"
+  export PHP_INI_SCAN_DIR="$HOME/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 fi
 
 SSH_KEY="$HOME/.ssh/github"
@@ -49,6 +46,9 @@ shopt -s histappend
 alias ff="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'"
 alias ls="eza --all --group-directories-first"
 alias lt="eza --tree --all --group-directories-first"
+
+alias lg="lazygit"
+alias ld="lazydocker"
 
 alias ..="cd .."
 alias ...="cd ../.."
