@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 export EDITOR=nvim
 export MANPAGER="nvim +Man!"
 export HISTCONTROL=ignoreboth

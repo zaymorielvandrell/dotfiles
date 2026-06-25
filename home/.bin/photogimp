@@ -5,19 +5,19 @@ set -euo pipefail
 GIMP_CONFIG="$HOME/.config/GIMP"
 GIMP_CACHE="$HOME/.cache/gimp"
 SOURCE_ZIP="$HOME/.bin/share/PhotoGIMP-linux.zip"
-TMP_DIR=''
+TMP_DIR=""
 
 log_info() {
-  printf '%s\n' "$*"
+  printf "%s\n" "$*"
 }
 
 log_error() {
-  printf 'ERROR: %s\n' "$*" >&2
+  printf "ERROR: %s\n" "$*" >&2
 }
 
 cleanup() {
-  if [[ -n "${TMP_DIR}" ]]; then
-    rm -rf -- "${TMP_DIR}"
+  if [[ -n "$TMP_DIR" ]]; then
+    rm -rf -- "$TMP_DIR"
   fi
 }
 
@@ -25,16 +25,16 @@ main() {
   local extracted_gimp
   local reply
 
-  if [[ ! -f "${SOURCE_ZIP}" ]]; then
+  if [[ ! -f "$SOURCE_ZIP" ]]; then
     log_error "source archive not found: ${SOURCE_ZIP}"
     exit 1
   fi
 
-  if [[ -d "${GIMP_CONFIG}" ]]; then
-    read -rp 'Existing GIMP config detected. Replace it? [Y/n]: ' reply
+  if [[ -d "$GIMP_CONFIG" ]]; then
+    read -rp "Existing GIMP config detected. Replace it? [Y/n]: " reply
 
     if [[ ! "${reply:-Y}" =~ ^[Yy]$ ]]; then
-      log_info 'Operation cancelled'
+      log_info "Operation cancelled"
       exit 0
     fi
   fi
@@ -44,16 +44,16 @@ main() {
 
   extracted_gimp="${TMP_DIR}/PhotoGIMP-linux/.config/GIMP"
 
-  unzip -qo "${SOURCE_ZIP}" -d "${TMP_DIR}"
+  unzip -qo "$SOURCE_ZIP" -d "$TMP_DIR"
 
-  if [[ ! -d "${extracted_gimp}" ]]; then
-    log_error 'invalid archive structure (GIMP config not found)'
+  if [[ ! -d "$extracted_gimp" ]]; then
+    log_error "invalid archive structure (GIMP config not found)"
     exit 1
   fi
 
-  rm -rf "${GIMP_CONFIG}" "${GIMP_CACHE}"
-  mv "${extracted_gimp}" "${GIMP_CONFIG}"
-  log_info 'GIMP configuration installed successfully'
+  rm -rf "$GIMP_CONFIG" "$GIMP_CACHE"
+  mv "$extracted_gimp" "$GIMP_CONFIG"
+  log_info "GIMP configuration installed successfully"
 }
 
 main "$@"
