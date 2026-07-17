@@ -4,9 +4,10 @@ set -euo pipefail
 
 SEARCH_DIRS=(
   "$HOME"
-  "${HOME}/Workspace/Personal"
-  "${HOME}/Workspace/Research"
-  "${HOME}/Workspace/Work"
+  "${HOME}/Workspaces/Personal"
+  "${HOME}/Workspaces/research"
+  "${HOME}/Workspaces/work"
+  "${HOME}/Workspaces/work/sveikastudio"
 )
 
 log_error() {

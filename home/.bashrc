@@ -11,12 +11,18 @@ if [[ -d "$HOME/.bin" ]]; then
   export PATH="$HOME/.bin:$PATH"
 fi
 
-if [[ -d "$HOME/.config/herd-lite/bin" ]]; then
-  export PATH="$HOME/.config/herd-lite/bin:$PATH"
-  export PHP_INI_SCAN_DIR="$HOME/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
+if [[ -d "$HOME/.local/bin" ]]; then
+  export PATH="$HOME/.local/bin:$PATH"
 fi
 
-SSH_KEY="$HOME/.ssh/github"
+if [[ -d "$HOME/.config/composer/vendor/bin" ]]; then
+  export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+fi
+
+SSH_KEYS=(
+  "$HOME/.ssh/github"
+  "$HOME/.ssh/sveikalabs"
+)
 SSH_ENV="$HOME/.ssh/agent.env"
 
 start_ssh_agent() {
@@ -25,9 +31,11 @@ start_ssh_agent() {
   echo "export SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >"$SSH_ENV"
   echo "export SSH_AGENT_PID=$SSH_AGENT_PID" >>"$SSH_ENV"
 
-  if [[ -f "$SSH_KEY" ]]; then
-    ssh-add "$SSH_KEY" &>/dev/null
-  fi
+  for key in "${SSH_KEYS[@]}"; do
+    if [[ -f "$key" ]]; then
+      ssh-add "$key" &>/dev/null
+    fi
+  done
 }
 
 if [[ -f "$SSH_ENV" ]]; then
@@ -48,6 +56,10 @@ shopt -s histappend
 alias ff="fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}'"
 alias ls="eza --all --group-directories-first"
 alias lt="eza --tree --all --group-directories-first"
+
+alias v="nvim"
+alias c="flatpak run com.visualstudio.code"
+alias z="flatpak run --env=ZED_FLATPAK_NO_ESCAPE=1 dev.zed.Zed"
 
 alias lg="lazygit"
 alias ld="lazydocker"
